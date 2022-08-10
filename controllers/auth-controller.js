@@ -27,9 +27,7 @@ const createSendToken = (account, statusCode, res) => {
   res.status(statusCode).json({
     status: "success",
     token,
-    data: {
-      account,
-    },
+    data: account,
   });
 };
 

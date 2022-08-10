@@ -19,7 +19,7 @@ const handleValidatorErrorDB = (err) => {
 };
 
 const sendErrorDev = (err, res) => {
-  console.log(err.name);
+  console.log(err);
 
   res.status(err.statusCode).json({
     status: err.status,

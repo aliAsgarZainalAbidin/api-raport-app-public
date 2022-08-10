@@ -21,7 +21,7 @@ router
 router
   .route("/:id")
   .get(authController.protect, accountController.getAccount)
-  .patch(authController.protect, accountController.updateAccount)
+  .put(authController.protect, accountController.updateAccount)
   .delete(authController.protect, accountController.deleteAccount);
 
 module.exports = router;

@@ -77,7 +77,7 @@ exports.deleteAccount = catchAsync(async (req, res, next) => {
   const account = await Account.findByIdAndDelete(req.params.id);
 
   if (!account) {
-    return next(new AppError("No tour found with that ID", 404));
+    return next(new AppError("No Account found with that ID", 404));
   }
 
   res.status(204).json({

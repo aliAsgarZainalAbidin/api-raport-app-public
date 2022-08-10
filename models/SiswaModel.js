@@ -80,12 +80,12 @@ const siswaSchema = new mongoose.Schema({
     trim: true,
     required: [true, "Nomor Hp Orang Tua wajib diisi"],
   },
-  classId: {
-    type: mongoose.Schema.ObjectId,
-    trim: true,
-    ref: "Class",
-    required: [true, "Kelas Wajib Diisi"],
-  },
+  // classId: {
+  //   type: mongoose.Schema.ObjectId,
+  //   trim: true,
+  //   ref: "Class",
+  //   required: [true, "Kelas Wajib Diisi"],
+  // },
   photo: {
     type: String,
     trim: true,

@@ -36,6 +36,14 @@ exports.getAttendance = catchAsync(async (req, res, next) => {
         mapelId: ObjectId(req.query.mapelId),
       },
     },
+    {
+      $lookup: {
+        from: "siswas",
+        localField: "attendance.siswaId",
+        foreignField: "_id",
+        as: "detailSiswa",
+      },
+    },
   ]);
 
   res.status(200).json({
@@ -47,6 +55,44 @@ exports.getAttendance = catchAsync(async (req, res, next) => {
 
 exports.getAttendanceById = catchAsync(async (req, res, next) => {
   const attendance = await Attendance.findById(req.params.id);
+
+  if (!attendance) {
+    return next(new AppError("Attendance with that ID not found!", 404));
+  }
+
+  res.status(200).json({
+    status: "Success",
+    data: attendance,
+  });
+});
+
+exports.getAttendanceBySiswaId = catchAsync(async (req, res, next) => {
+  const attendance = await Attendance.find({
+    mapelId: ObjectId(req.query.mapelId),
+    "attendance.siswaId": ObjectId(req.query.siswaId),
+  });
+
+  // let newAttendance = [];
+  // attendance.forEach(parseObjectIdtoString);
+
+  // function parseObjectIdtoString(item) {
+  //   item.attendance.forEach(selectMatchSiswaId);
+  //   // newAttendance.push(siswa);
+  // }
+
+  // function selectMatchSiswaId(item) {
+  //   // console.log(`${ObjectId(item.siswaId)} ITEM`);
+  //   // console.log(req.query.siswaId);
+  //   if (ObjectId(item.siswaId) == req.query.siswaId) {
+  //     // console.log(item.siswaId);
+  //     newAttendance.push(item);
+  //   }
+  // }
+
+  // const finalAttendance = {
+  //   tanggalAbsen: attendance.tanggalAbsen,
+  //   attendance: newAttendance,
+  // };
 
   if (!attendance) {
     return next(new AppError("Attendance with that ID not found!", 404));

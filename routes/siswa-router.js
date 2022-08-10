@@ -1,12 +1,19 @@
 const express = require("express");
 const router = express.Router();
+const fs = require("fs");
 const authController = require("./../controllers/auth-controller");
 const siswaController = require("./../controllers/siswa-controller");
+
+router.get("/file/:name", siswaController.sendImages);
 
 router
   .route("/")
   .get(authController.protect, siswaController.getAllSiswa)
-  .post(authController.protect, siswaController.createSiswa);
+  .post(
+    authController.protect,
+    siswaController.uploadSiswaPhoto,
+    siswaController.createSiswa
+  );
 
 router
   .route("/:id")
