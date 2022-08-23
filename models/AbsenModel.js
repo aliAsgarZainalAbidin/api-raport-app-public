@@ -14,7 +14,7 @@ const attendanceSchema = new mongoose.Schema({
   tanggalAbsen: {
     type: String,
     required: [true, "Tanggal Absen wajib diisi"],
-    trim: true, //jangan ambil nilai otomatis pada Android
+    trim: true,
   },
   attendance: [
     {

@@ -24,7 +24,7 @@ exports.getAllRaport = catchAsync(async (req, res, next) => {
 });
 
 exports.getSpesificRaportSiswa = catchAsync(async (req, res, next) => {
-  const raport = await Raport.aggregate([
+  let raport = await Raport.aggregate([
     {
       $match: {
         classId: ObjectId(req.query.classId),
@@ -48,6 +48,23 @@ exports.getSpesificRaportSiswa = catchAsync(async (req, res, next) => {
     },
   ]);
 
+  console.log(raport.length);
+  if (raport.length == 0) {
+    var body = {
+      classId: ObjectId(req.query.classId),
+      mapelId: ObjectId(req.query.mapelId),
+      siswaId: ObjectId(req.query.siswaId),
+      nilaiSikap: 0,
+      nilaiUAS: 0,
+      nilaiUTS: 0,
+    };
+    raport = await Raport.create(body);
+    res.status(200).json({
+      status: "Success",
+      data: raport,
+    });
+  }
+
   if (!raport) {
     return next(new AppError("Raport With that ID not found!", 404));
   }
@@ -55,6 +72,50 @@ exports.getSpesificRaportSiswa = catchAsync(async (req, res, next) => {
   res.status(200).json({
     status: "Success",
     data: raport[0],
+  });
+});
+
+exports.raportPdf = catchAsync(async (req, res, next) => {
+  let raport = await Raport.aggregate([
+    {
+      $match: {
+        classId: ObjectId(req.query.classId),
+        siswaId: ObjectId(req.query.siswaId),
+      },
+    },
+    {
+      $unwind: "$mapelId",
+    },
+    {
+      $lookup: {
+        from: "tugas",
+        localField: "tugasId",
+        foreignField: "_id",
+        as: "tugasDetail",
+      },
+    },
+    {
+      $lookup: {
+        from: "mapels",
+        localField: "mapelId",
+        foreignField: "_id",
+        as: "mapelDetail",
+      },
+    },
+    {
+      $unset: ["classId", "siswaId", "mapelId", "tugasId"],
+    },
+  ]);
+
+  console.log(raport);
+
+  if (!raport) {
+    return next(new AppError("Raport With that ID not found!", 404));
+  }
+
+  res.status(200).json({
+    status: "Success",
+    data: raport,
   });
 });
 

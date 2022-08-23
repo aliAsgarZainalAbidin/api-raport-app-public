@@ -5,6 +5,6 @@ const growthController = require("./../controllers/growth-controller");
 
 router
   .route("/")
-  .patch(authController.protect, growthController.addGrowthInPesan);
+  .post(authController.protect, growthController.addGrowthInPesan);
 
 module.exports = router;

@@ -14,7 +14,7 @@ exports.createNewAttendance = catchAsync(async (req, res, next) => {
   function parseObjectIdtoString(item) {
     const siswa = {
       siswaId: item.toString(),
-      kehadiran: "Tanpa Keterangan",
+      kehadiran: "Tanpa Ket.",
     };
     newSiswaId.push(siswa);
   }
@@ -45,6 +45,7 @@ exports.getAttendance = catchAsync(async (req, res, next) => {
       },
     },
   ]);
+  console.log(attendance);
 
   res.status(200).json({
     status: "Success",
@@ -54,7 +55,21 @@ exports.getAttendance = catchAsync(async (req, res, next) => {
 });
 
 exports.getAttendanceById = catchAsync(async (req, res, next) => {
-  const attendance = await Attendance.findById(req.params.id);
+  const attendance = await Attendance.aggregate([
+    {
+      $match: {
+        _id: ObjectId(req.params.id),
+      },
+    },
+    {
+      $lookup: {
+        from: "siswas",
+        localField: "attendance.siswaId",
+        foreignField: "_id",
+        as: "siswaDetail",
+      },
+    },
+  ]);
 
   if (!attendance) {
     return next(new AppError("Attendance with that ID not found!", 404));
@@ -113,6 +128,8 @@ exports.updateAttendanceById = catchAsync(async (req, res, next) => {
       runValidators: true,
     }
   );
+
+  console.log(attendance);
 
   if (!attendance) {
     return next(new AppError("Attendance with that ID not found!", 404));

@@ -6,7 +6,7 @@ const Pesan = require("./../models/PesanModel");
 exports.addNoteInPesan = catchAsync(async (req, res, next) => {
   const note = await Note.create(req.body);
   await Pesan.updateOne(
-    { _id: req.body.pesanId.toString() },
+    { _id: req.body.pesanId },
     { $push: { noteId: note._id } }
   );
 

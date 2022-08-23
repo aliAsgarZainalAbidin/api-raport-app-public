@@ -12,7 +12,7 @@ router
 router
   .route("/:id")
   .get(authController.protect, mapelController.getMapelById)
-  .patch(authController.protect, mapelController.updateById)
+  .put(authController.protect, mapelController.updateById)
   .delete(authController.protect, mapelController.deleteMapelById);
 
 module.exports = router;

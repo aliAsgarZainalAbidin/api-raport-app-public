@@ -1,5 +1,6 @@
 const Mapel = require("./../models/MapelModel");
 const AppError = require("./../utils/appError");
+const Class = require("./../models/ClassModule");
 const catchAsync = require("./../utils/catchAsync");
 
 exports.create = catchAsync(async (req, res) => {
@@ -13,6 +14,16 @@ exports.create = catchAsync(async (req, res) => {
 
 exports.deleteMapelById = catchAsync(async (req, res, next) => {
   const mapel = await Mapel.findByIdAndDelete(req.params.id);
+  await Class.updateMany(
+    {
+      $mapelId: {
+        $elemMatch: { $eq: req.params.id },
+      },
+    },
+    {
+      $pull: { mapelId: ObjectId(req.params.id) },
+    }
+  );
 
   if (!mapel) {
     return next(new AppError("Mapel with that ID not found!"));

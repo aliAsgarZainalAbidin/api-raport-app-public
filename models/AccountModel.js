@@ -53,6 +53,10 @@ const accountSchema = new mongoose.Schema({
     type: String,
     trim: true,
   },
+  tanggalLahir: {
+    type: String,
+    trim: true,
+  },
   classId: {
     type: mongoose.Schema.ObjectId,
     ref: "Class",

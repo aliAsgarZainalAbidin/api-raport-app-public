@@ -8,6 +8,10 @@ router
   .get(authController.protect, classController.getClassByGuruId);
 
 router
+  .route("/siswa/:id")
+  .get(authController.protect, classController.getClassByNisSiswa);
+
+router
   .route("/")
   .get(authController.protect, classController.getAllClass)
   .post(authController.protect, classController.createClass);
@@ -15,7 +19,7 @@ router
 router
   .route("/:id")
   .delete(authController.protect, classController.deleteClass)
-  .patch(authController.protect, classController.updateClass)
+  .put(authController.protect, classController.updateClass)
   .get(authController.protect, classController.getClassById);
 
 module.exports = router;

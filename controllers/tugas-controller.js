@@ -9,12 +9,12 @@ const ObjectId = mongoose.Types.ObjectId;
 exports.createTugas = catchAsync(async (req, res, next) => {
   const tugas = await Tugas.create(req.body);
   await Raport.updateOne(
-    { _id: req.body.raportId.toString() },
+    { _id: req.body.raportId },
     { $push: { tugasId: tugas._id } }
   );
   const raport = await Raport.findById(req.body.raportId);
 
-  res.status(200).json({
+  res.status(201).json({
     status: "Success",
     data: raport,
   });

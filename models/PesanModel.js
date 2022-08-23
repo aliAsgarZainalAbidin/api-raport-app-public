@@ -5,6 +5,7 @@ const pesanSchema = new mongoose.Schema({
     type: mongoose.Schema.ObjectId,
     ref: "Siswa",
     required: [true, "Siswa ID wajib diisi"],
+    unique: true,
   },
   growthId: [
     {

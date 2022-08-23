@@ -16,6 +16,6 @@ router
 router
   .route("/:id")
   .get(authController.protect, attendanceController.getAttendanceById)
-  .patch(authController.protect, attendanceController.updateAttendanceById);
+  .put(authController.protect, attendanceController.updateAttendanceById);
 
 module.exports = router;
