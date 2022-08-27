@@ -2,7 +2,7 @@
   "name": "api-raport-app",
   "version": "1.0.0",
   "description": "api for raport app",
-  "main": "server.js",
+  "main": "app.js",
   "scripts": {
     "start": "nodemon server.js",
     "start:prod": "SET NODE_ENV=production&& nodemon server.js",
