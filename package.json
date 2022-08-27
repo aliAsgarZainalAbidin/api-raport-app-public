@@ -4,10 +4,7 @@
   "description": "api for raport app",
   "main": "app.js",
   "scripts": {
-    "start": "node server.js",
-    "start:dev": "node server.js",
-    "start:prod": "SET NODE_ENV=production&& node server.js",
-    "debug": "ndb server.js"
+    "start": "node server.js"
   },
   "author": "Ali",
   "license": "ISC",
