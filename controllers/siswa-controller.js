@@ -182,17 +182,27 @@ exports.createSiswa = catchAsync(async (req, res) => {
 });
 
 exports.uploadPhoto = catchAsync(async (req, res, next) => {
+  console.log(`FILE NAME : ${req.file.filename}`)
   if (req.file) req.body.photo = req.file.filename;
-  var siswa = await Siswa.updateOne(
+  console.log(req.body.photo)
+  var siswa = await Siswa.findByIdAndUpdate(req.params.id,
     {
-      _id: req.params.id,
-    },
-    {
-      $set: {
-        $photo: req.body.photo,
-      },
+      photo: req.body.photo,
     }
   );
+  
+  console.log(siswa.photo)
+  
+  // var siswa = await Siswa.updateOne(
+  //   {
+  //     _id: ObjectId(req.params.id),
+  //   },
+  //   {
+  //     $set: {
+  //       $photo: req.body.photo,
+  //     },
+  //   }
+  // );
 
   res.status(200).json({
     status: "Success",

@@ -8,6 +8,7 @@ router.get("/file/:name", siswaController.sendImages);
 router.post(
   "/updatePhoto/:id",
   authController.protect,
+  siswaController.uploadSiswaPhoto,
   siswaController.uploadPhoto
 );
 
