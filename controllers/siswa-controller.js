@@ -9,7 +9,6 @@ const Growth = require("./../models/GrowthModel");
 const Note = require("./../models/NoteModel");
 const Tugas = require("./../models/TugasModel");
 const Account = require("./../models/AccountModel");
-const path = require("node:path");
 const multer = require("multer");
 const mongoose = require("mongoose");
 const Attendance = require("../models/AbsenModel");

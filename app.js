@@ -1,5 +1,6 @@
 const express = require("express");
 const morgan = require("morgan");
+const http = require('http')
 const app = express();
 const AppError = require("./utils/appError");
 
@@ -48,4 +49,5 @@ app.use("*", (req, res, next) => {
 });
 app.use(globalErrorHandler);
 
-module.exports = app;
+const finalApp = http.createServer(app)
+module.exports = app

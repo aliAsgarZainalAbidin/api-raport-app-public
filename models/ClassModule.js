@@ -9,12 +9,8 @@ const classSchema = new mongoose.Schema({
     unique: [true, "Nama Kelas telah digunakan"],
   },
   semester: {
-    type: Number,
+    type: String,
     trim: true,
-    enum: {
-      values: [1, 2],
-      message: "Semester bernilai : 1 atau 2",
-    },
     required: [true, "Semester wajib diisi"],
   },
   tahunAjaran: {
