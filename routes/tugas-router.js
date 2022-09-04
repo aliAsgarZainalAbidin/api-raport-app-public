@@ -8,7 +8,7 @@ router.route("/").post(authController.protect, tugasController.createTugas);
 router
   .route("/:id")
   .get(authController.protect, tugasController.getTugasById)
-  .patch(authController.protect, tugasController.updateTugasById)
+  .put(authController.protect, tugasController.updateTugasById)
   .delete(authController.protect, tugasController.deleteTugasById);
 
 router

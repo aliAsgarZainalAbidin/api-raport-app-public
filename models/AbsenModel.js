@@ -14,7 +14,7 @@ const attendanceSchema = new mongoose.Schema({
   tanggalAbsen: {
     type: String,
     required: [true, "Tanggal Absen wajib diisi"],
-    trim: true, //jangan ambil nilai otomatis pada Android
+    trim: true,
   },
   attendance: [
     {
@@ -26,11 +26,11 @@ const attendanceSchema = new mongoose.Schema({
       kehadiran: {
         type: String,
         enum: {
-          values: ["Hadir", "Sakit", "Izin", "Tanpa Keterangan"],
+          values: ["Hadir", "Sakit", "Izin", "Tanpa Ket."],
           message:
-            "Kehadiran hanya diisi dengan nilai : Hadir, Sakit, Izin dan Tanpa Keterangan",
+            "Kehadiran hanya diisi dengan nilai : Hadir, Sakit, Izin dan Tanpa Ket.",
         },
-        default: "Tanpa Keterangan",
+        default: "Tanpa Ket.",
       },
     },
   ],

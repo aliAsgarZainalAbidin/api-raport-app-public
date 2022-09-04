@@ -2,13 +2,24 @@ const Account = require("../models/AccountModel");
 const AppError = require("../utils/appError");
 const catchAsync = require("../utils/catchAsync");
 const promisify = require("util");
+const bcrypt = require("bcryptjs");
 const ApiFeatures = require("../utils/apiFeatures");
 
 exports.updateAccount = catchAsync(async (req, res, next) => {
-  const account = await Account.findByIdAndUpdate(req.params.id, req.body, {
-    new: true,
-    runValidators: true,
-  });
+  let account = await Account.findById(req.params.id).select("password");
+
+  if (!(await account.correctPassword(req.body.password, account.password))) {
+    return next(new AppError("Your current password is wrong", 401));
+  }
+
+  account.name = req.body.name;
+  account.password = req.body.password;
+  account.passwordConfirm = req.body.password;
+  account.address = req.body.address;
+  account.email = req.body.email;
+  account.phone = req.body.phone;
+  account.tanggalLahir = req.body.tanggalLahir;
+  await account.save();
 
   if (!account) {
     return next(new AppError("No tour found with that ID", 404));
@@ -77,7 +88,7 @@ exports.deleteAccount = catchAsync(async (req, res, next) => {
   const account = await Account.findByIdAndDelete(req.params.id);
 
   if (!account) {
-    return next(new AppError("No tour found with that ID", 404));
+    return next(new AppError("No Account found with that ID", 404));
   }
 
   res.status(204).json({
@@ -95,5 +106,35 @@ exports.getAccount = catchAsync(async (req, res, next) => {
   res.status(200).json({
     status: "Success",
     data: account,
+  });
+});
+
+exports.getAccountByUsername = catchAsync(async (req, res, next) => {
+  const account = await Account.findOne({
+    username: req.params.username,
+  });
+
+  if (!account) {
+    next(new AppError("Account not Found!", 404));
+  }
+
+  res.status(200).json({
+    status: "Success",
+    data: account,
+  });
+});
+
+exports.deleteAccountByUsername = catchAsync(async (req, res, next) => {
+  const account = await Account.findOneAndDelete({
+    username: req.params.username,
+  });
+
+  if (!account) {
+    next(new AppError("Account not Found!", 404));
+  }
+
+  res.status(204).json({
+    status: "Success",
+    data: null,
   });
 });

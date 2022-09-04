@@ -102,3 +102,9 @@ exports.protect = catchAsync(async (req, res, next) => {
   req.account = freshAccount;
   next();
 });
+
+exports.logout = (req, res) => {
+  res.status(200).json({
+    status: "Success",
+  });
+};

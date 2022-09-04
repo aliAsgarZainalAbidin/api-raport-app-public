@@ -4,8 +4,14 @@ const router = express.Router();
 const authController = require("../controllers/auth-controller");
 const accountController = require("../controllers/account-controller");
 
+router
+  .route("/detail/:username")
+  .get(authController.protect, accountController.getAccountByUsername)
+  .delete(authController.protect, accountController.deleteAccountByUsername);
+
 router.post("/signup", authController.signup);
 router.post("/login", authController.login);
+router.post("/logout", authController.logout);
 router.post(
   "/updatePassword",
   authController.protect,
@@ -21,7 +27,7 @@ router
 router
   .route("/:id")
   .get(authController.protect, accountController.getAccount)
-  .patch(authController.protect, accountController.updateAccount)
+  .put(authController.protect, accountController.updateAccount)
   .delete(authController.protect, accountController.deleteAccount);
 
 module.exports = router;

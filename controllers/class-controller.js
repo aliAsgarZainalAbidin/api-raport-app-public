@@ -28,6 +28,8 @@ exports.updateClass = catchAsync(async (req, res, next) => {
     return next(new AppError("Kelas with that ID not Found", 404));
   }
 
+  console.log(kelas);
+
   res.status(200).json({
     status: "Success",
     data: kelas,
@@ -56,11 +58,19 @@ exports.getClassByGuruId = catchAsync(async (req, res, next) => {
         from: "mapels",
         localField: "mapelId",
         foreignField: "_id",
-        as: "detailMapel",
+        as: "mapelDetail",
       },
     },
     {
-      $unset: ["mapelId", "__v", "siswaId"],
+      $lookup: {
+        from: "siswas",
+        localField: "siswaId",
+        foreignField: "_id",
+        as: "siswaDetail",
+      },
+    },
+    {
+      $unset: ["mapelId", "__v"],
     },
   ]);
 
@@ -71,6 +81,45 @@ exports.getClassByGuruId = catchAsync(async (req, res, next) => {
   res.status(200).json({
     status: "Success",
     data: kelas[0],
+  });
+});
+
+exports.getClassByNisSiswa = catchAsync(async (req, res) => {
+  let kelas = await Class.aggregate([
+    {
+      $lookup: {
+        from: "siswas",
+        localField: "siswaId",
+        foreignField: "_id",
+        as: "detailSiswa",
+      },
+    },
+    {
+      $lookup: {
+        from: "mapels",
+        localField: "mapelId",
+        foreignField: "_id",
+        as: "mapelDetail",
+      },
+    },
+  ]);
+
+  kelas.forEach((item) => {
+    item.detailSiswa.forEach((detail) => {
+      if (detail.nis === req.params.id) {
+        // console.log(detail);
+        kelas = item;
+      }
+    });
+  });
+
+  if (!kelas) {
+    next(new AppError("Class with that NIS not Found", 404));
+  }
+
+  res.status(200).json({
+    status: "Success",
+    data: kelas,
   });
 });
 
@@ -107,6 +156,14 @@ exports.getClassById = catchAsync(async (req, res) => {
       },
     },
     {
+      $lookup: {
+        from: "accounts",
+        localField: "guruKelas",
+        foreignField: "_id",
+        as: "detailGuru",
+      },
+    },
+    {
       $unset: [
         "siswaId",
         "__0",
@@ -116,6 +173,7 @@ exports.getClassById = catchAsync(async (req, res) => {
         "siswaDetail.namaAyah",
         "siswaDetail.namaIbu",
         "mapelId",
+        "guruKelas",
       ],
     },
   ]);

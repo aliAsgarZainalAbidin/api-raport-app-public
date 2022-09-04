@@ -19,7 +19,7 @@ const handleValidatorErrorDB = (err) => {
 };
 
 const sendErrorDev = (err, res) => {
-  console.log(err.name);
+  console.log(err);
 
   res.status(err.statusCode).json({
     status: err.status,
@@ -56,7 +56,7 @@ const handleTokenExpiredError = () =>
 module.exports = (err, req, res, next) => {
   err.statusCode = err.statusCode || 500;
   err.status = err.status || "error";
-  if (process.env.NODE_ENV.trim() === "development".trim()) {
+  if (process.env.NODE_ENV.trim() === "production".trim()) {
     console.log("DEV ERROR");
     sendErrorDev(err, res);
   } else if (process.env.NODE_ENV.trim() === "production".trim()) {

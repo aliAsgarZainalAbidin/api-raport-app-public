@@ -10,7 +10,12 @@ const DB = process.env.DATABASE.replace(
 );
 
 mongoose
+<<<<<<< HEAD
   .connect(DB, {
+=======
+  // .connect(process.env.DATABASE_LOCAL, {
+    .connect(DB, {
+>>>>>>> ff936ee1c15393b42b93f09dd153705be9fa9ea7
     useNewUrlParser: true,
   })
   .then((con) => {
